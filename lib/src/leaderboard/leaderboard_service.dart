@@ -40,6 +40,7 @@ class LeaderboardService with ChangeNotifier {
   fetchStats({int sport = 1}) async {
     final url = '$apiURL/GetPlayerStatsTest/All/$page/$count/$sport';
     var client = http.Client();
+    print('Fetsching');
     try {
       var response = await client.get(Uri.parse(url));
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;

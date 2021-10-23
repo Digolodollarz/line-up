@@ -56,57 +56,72 @@ class LeaderboardService with ChangeNotifier {
       final yearlyStats =
           yearlyStatsJson.map((stat) => PlayerStat.fromJson(stat)).toList();
 
-      this.weeklyStats =
-          DomainPage<PlayerStat>(items: weeklyStats, count: weeklyStats.length);
-      this.monthlyStats = DomainPage<PlayerStat>(
-          items: monthlyStats, count: monthlyStats.length);
-      this.yearlyStats =
-          DomainPage<PlayerStat>(items: yearlyStats, count: yearlyStats.length);
+      this.weeklyStats = DomainPage<PlayerStat>(items: weeklyStats, page: page);
+      this.monthlyStats =
+          DomainPage<PlayerStat>(items: monthlyStats, page: page);
+      this.yearlyStats = DomainPage<PlayerStat>(items: yearlyStats, page: page);
 
       venues = (weeklyStats + monthlyStats + yearlyStats)
-          .map((e) => e.venueAddress?? 'Unknown')
+          .map((e) => e.venueAddress ?? 'Unknown')
           .toSet()
           .toList();
 
       notifyListeners();
+      print(page);
     } finally {
       client.close();
     }
+  }
+
+  next(StatDuration duration, {int sport = 1}) async {
+    page++;
+    fetchStats(sport: sport);
+  }
+
+  previous(StatDuration duration, {int sport = 1}) async {
+    page = (page - 1).clamp(1, 9007199254740991);
+    fetchStats(sport: sport);
   }
 
   monthlyVenueStats(String venue) {
     final stats =
         monthlyStats?.items.where((e) => e.venueAddress == venue).toList() ??
             [];
-    return DomainPage<PlayerStat>(items: stats, count: stats.length);
+    return DomainPage<PlayerStat>(items: stats, page: page);
   }
 
   weeklyVenueStats(String venue) {
     final stats =
         weeklyStats?.items.where((e) => e.venueAddress == venue).toList() ?? [];
-    return DomainPage<PlayerStat>(items: stats, count: stats.length);
+    return DomainPage<PlayerStat>(items: stats, page: page);
   }
 
   yearlyVenueStats(String venue) {
     final stats =
         yearlyStats?.items.where((e) => e.venueAddress == venue).toList() ?? [];
-    return DomainPage<PlayerStat>(items: stats, count: stats.length);
+    return DomainPage<PlayerStat>(items: stats, page: page);
   }
 }
 
+enum StatDuration { week, month, year }
+
 /// A container for Pageables backed by [List]
 class DomainPage<T> {
+  /// Current page number
   int page;
-  int count;
+
+  /// Total number of items in the data
   int? total;
   List<T> items;
 
   DomainPage({
-    this.page = 0,
-    this.count = 0,
+    required this.page,
     this.total,
     this.items = const [],
   });
+
+  /// Total number of items in the page
+  int get count => items.length;
 }
 
 // ToDo: Move this to a constants file.

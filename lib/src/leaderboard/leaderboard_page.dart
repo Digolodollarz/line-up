@@ -64,131 +64,109 @@ class LeaderboardPage extends StatelessWidget {
                       if (leaderboardService.yearlyStats == null) {
                         return const CircularProgressIndicator();
                       }
+                      final venues = leaderboardService.venues;
                       return Expanded(
                         child: DefaultTabController(
-                          length: leaderboardService.venues.length,
+                          length: venues.length + 1,
                           child: Column(
                             children: [
                               TabBar(
                                 isScrollable: true,
-                                tabs: [
-                                  'All',
-                                  'Jss Private School',
-                                  'Next Generation School',
-                                  'Scout Mission'
-                                ].map((e) => Text(e)).toList(),
+                                tabs: [const Text('All')] + venues.map((e) => Text(e)).toList(),
                               ),
                               const SizedBox(height: 8),
                               Expanded(
                                 child: TabBarView(
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.grey),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: SingleChildScrollView(
-                                        child: DefaultTextStyle(
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              SizedBox(height: 16),
-                                              DetailCard(
-                                                title: leaderboardService.week,
-                                                stats: leaderboardService
-                                                    .weeklyStats!,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.grey),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          child: SingleChildScrollView(
+                                            child: DefaultTextStyle(
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black,
+                                                fontSize: 13,
                                               ),
-                                              SizedBox(height: 16),
-                                              DetailCard(
-                                                title: leaderboardService.month,
-                                                stats: leaderboardService
-                                                    .monthlyStats!,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title:
+                                                        leaderboardService.week,
+                                                    stats: leaderboardService
+                                                        .weeklyStats!,
+                                                  ),
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title: leaderboardService
+                                                        .month,
+                                                    stats: leaderboardService
+                                                        .monthlyStats!,
+                                                  ),
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title:
+                                                        leaderboardService.year,
+                                                    stats: leaderboardService
+                                                        .yearlyStats!,
+                                                  ),
+                                                ],
                                               ),
-                                              SizedBox(height: 16),
-                                              DetailCard(
-                                                title: leaderboardService.year,
-                                                stats: leaderboardService
-                                                    .yearlyStats!,
+                                            ),
+                                          ),
+                                        )
+                                      ] +
+                                      venues.map((venue) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.grey),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          child: SingleChildScrollView(
+                                            child: DefaultTextStyle(
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black,
+                                                fontSize: 13,
                                               ),
-                                            ],
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title:
+                                                        leaderboardService.week,
+                                                    stats: leaderboardService
+                                                        .weeklyVenueStats(venue)!,
+                                                  ),
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title: leaderboardService
+                                                        .month,
+                                                    stats: leaderboardService
+                                                        .monthlyVenueStats(venue)!,
+                                                  ),
+                                                  SizedBox(height: 16),
+                                                  DetailCard(
+                                                    title:
+                                                        leaderboardService.year,
+                                                    stats: leaderboardService
+                                                        .yearlyVenueStats(venue)!,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.grey),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: SingleChildScrollView(
-                                        child: DefaultTextStyle(
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: const [
-                                              SizedBox(height: 16),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.grey),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: SingleChildScrollView(
-                                        child: DefaultTextStyle(
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: const [
-                                              SizedBox(height: 16),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.grey),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: SingleChildScrollView(
-                                        child: DefaultTextStyle(
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: const [
-                                              SizedBox(height: 16),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                        );
+                                      }).toList(),
                                 ),
                               ),
                             ],

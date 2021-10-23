@@ -63,12 +63,10 @@ class LeaderboardService with ChangeNotifier {
       this.yearlyStats =
           DomainPage<PlayerStat>(items: yearlyStats, count: yearlyStats.length);
 
-      final names = (weeklyStats + monthlyStats + yearlyStats)
-          .map((e) => e.venueAddress)
+      venues = (weeklyStats + monthlyStats + yearlyStats)
+          .map((e) => e.venueAddress?? 'Unknown')
           .toSet()
           .toList();
-
-      print('Names: ${names.length} \n $names');
 
       notifyListeners();
     } finally {
@@ -96,7 +94,7 @@ class LeaderboardService with ChangeNotifier {
   }
 }
 
-/// A container for Pagebles backed by [List]
+/// A container for Pageables backed by [List]
 class DomainPage<T> {
   int page;
   int count;
